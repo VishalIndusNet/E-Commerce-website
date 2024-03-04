@@ -21,9 +21,6 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long orderId;
 
-    @Email
-    @Column(nullable = false)
-    private String email;
 
     @OneToMany(mappedBy = "order", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     private List<OrderItem> orderItems = new ArrayList<>();
