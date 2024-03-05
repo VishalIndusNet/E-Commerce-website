@@ -32,13 +32,15 @@ public class AuthController {
 
     @PostMapping("/sign-up")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpForm signUpForm)  {
-        return authService.registerUser(signUpForm);
+       // return authService.registerUser(signUpForm);
+        return new ResponseEntity<>(authService.registerUser(signUpForm),HttpStatus.CREATED);
     }
 
 
     @PostMapping("/sign-in")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginForm loginForm) {
-        return authService.loginUser(loginForm);
+      //  return authService.loginUser(loginForm);
+        return new ResponseEntity<>(authService.loginUser(loginForm),HttpStatus.OK);
     }
 
     @PostMapping("/refresh")

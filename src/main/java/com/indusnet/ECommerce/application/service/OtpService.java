@@ -46,6 +46,7 @@ public class OtpService {
                 entity -> {
                     // Update the existing entity with the new OTP value or handle the scenario as needed
                     entity.setOtp(otp);
+                    entity.setOtpGeneratedTime(LocalDateTime.now());
                     otpRepository.save(entity);
                 },
                 () -> {
@@ -57,30 +58,27 @@ public class OtpService {
 
     public boolean verifyOtp(String email, String enteredOtp) {
         final long OTP_EXPIRATION_DURATION_SECONDS = 120; // 2 minutes in seconds
-//        Optional<OtpEntity> optionalOtpEntity= otpRepository.findByEmail(email);
-//
-//
-//
+      //  Optional<OtpEntity> optionalOtpEntity= otpRepository.findByEmail(email);
+
+        Optional<OtpEntity> optionalOtpEntity = otpRepository.findByEmail(email);
+
+        return optionalOtpEntity.map(otpEntity -> {
+            boolean isOtpMatching = enteredOtp.equals(otpEntity.getOtp());
+            boolean isOtpExpired = Duration.between(otpEntity.getOtpGeneratedTime(), LocalDateTime.now()).getSeconds() > OTP_EXPIRATION_DURATION_SECONDS;
+
+            return isOtpMatching && !isOtpExpired;
+        }).orElse(false);
+
+
 //        return optionalOtpEntity.map(otpEntity -> {
 //            boolean isOtpMatching = otpEntity.getOtp().equals(enteredOtp);
+//            LocalDateTime currentTime= LocalDateTime.now();
+//
 //            boolean isOtpExpired = Duration.between(otpEntity.getOtpGeneratedTime(), LocalDateTime.now()).getSeconds() < OTP_EXPIRATION_DURATION_SECONDS;
 //
 //            return isOtpMatching && !isOtpExpired;
 //        }).orElse(false);
 
-
-        OtpEntity optionalOtpEntity= otpRepository.findByEmail(email).orElse(null);
-
-        if(optionalOtpEntity!=null){
-            boolean isOtpMatch= optionalOtpEntity.getOtp().equals(enteredOtp);
-            boolean isOtpExpired= optionalOtpEntity.getOtpGeneratedTime()
-                    .plusSeconds(OTP_EXPIRATION_DURATION_SECONDS)
-                    .isAfter(LocalDateTime.now());
-
-
-            return isOtpMatch && !isOtpExpired;
-        }
-        return false;
     }
 
 

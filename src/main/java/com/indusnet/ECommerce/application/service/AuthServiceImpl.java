@@ -36,7 +36,7 @@ public class AuthServiceImpl implements AuthService {
         RegisterResponse response= new RegisterResponse();
 
         if (userRepository.existsByEmail(signUpForm.getEmail())) {
-            return ResponseEntity.badRequest().body("Fail -> Email is already in use!");
+            return ResponseEntity.badRequest().body("Fail -> Email is already Used with Another Account     ");
         }
 
         // Creating user's account
@@ -127,7 +127,6 @@ public class AuthServiceImpl implements AuthService {
         } else {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to send the OTP email. Please try again.");
         }
-
     }
 
     @Override
@@ -136,8 +135,7 @@ public class AuthServiceImpl implements AuthService {
         User user = userRepository.findByEmail(verify.getEmail())
                 .orElseThrow(() -> new RuntimeException("User not found with this email: " + verify.getEmail()));
 
-        System.out.println(otpService.verifyOtp(verify.getEmail(), verify.getOtp()));
-        System.out.println("................................");
+
         if (otpService.verifyOtp(verify.getEmail(), verify.getOtp())) {
             user.setPassword(passwordEncoder.encode(verify.getNewPassword()));
 
@@ -146,7 +144,6 @@ public class AuthServiceImpl implements AuthService {
             return ResponseEntity.ok("Password changed successfully.");
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid OTP. Please try again.");
-
         }
     }
 }

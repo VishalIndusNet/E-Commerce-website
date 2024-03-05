@@ -11,13 +11,12 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class    SignUpForm {
+public class  SignUpForm {
 
     @NotBlank(message = "firstName can not be blank")
     @Size(min = 3, max = 50)
     @Pattern(regexp = "[A-Z]{1}[a-z]{2,}")
     private String firstName;
-
 
     @NotBlank(message = "Last name cannot be blank")
     @Size(min = 3, max = 50)

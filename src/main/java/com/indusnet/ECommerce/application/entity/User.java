@@ -1,5 +1,6 @@
 package com.indusnet.ECommerce.application.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
@@ -10,9 +11,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "users")
@@ -52,10 +51,7 @@ public class User implements UserDetails {
 
     private boolean isVerified = false;
 
-
-    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.EAGER)
-    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles = new HashSet<>();
+    private String role;
 
     @OneToOne(mappedBy = "user")
     private RefreshToken refreshToken;
@@ -66,6 +62,22 @@ public class User implements UserDetails {
     @OneToOne(mappedBy = "user", cascade = { CascadeType.PERSIST, CascadeType.MERGE }, orphanRemoval = true)
     private Cart cart;
 
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    private List<Address> address= new ArrayList<>();
+
+    @Embedded
+    @ElementCollection
+    @CollectionTable(name = "payment_information" ,joinColumns = @JoinColumn(name = "user_id"))
+    private List<PaymentInformation> paymentInformation= new ArrayList<>();
+
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Rating> ratings= new ArrayList<>();
+
+
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Review> reviews= new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
