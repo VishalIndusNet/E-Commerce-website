@@ -1,6 +1,6 @@
 package com.indusnet.ECommerce.application.service;
 
-import com.indusnet.ECommerce.application.dto.*;
+import com.indusnet.ECommerce.application.dto.authrequest.*;
 import com.indusnet.ECommerce.application.entity.RefreshToken;
 import com.indusnet.ECommerce.application.entity.User;
 import com.indusnet.ECommerce.application.repo.UserRepository;
@@ -105,6 +105,11 @@ public class AuthServiceImpl implements AuthService {
 
         // Encode and set the new password
         String newPassword = passwordEncoder.encode(changePasswordRequest.getNewPassword());
+
+        if(passwordEncoder.matches(changePasswordRequest.getOldPassword() ,newPassword)){
+            return ResponseEntity.badRequest().body("new Password and old Password cannot be same");
+        }
+
         user.setPassword(newPassword);
 
         // Save the updated user
@@ -137,6 +142,11 @@ public class AuthServiceImpl implements AuthService {
 
 
         if (otpService.verifyOtp(verify.getEmail(), verify.getOtp())) {
+
+            if(passwordEncoder.matches(verify.getNewPassword() ,user.getPassword())){
+                return ResponseEntity.badRequest().body("new Password and previous Password cannot be same");
+            }
+
             user.setPassword(passwordEncoder.encode(verify.getNewPassword()));
 
             userRepository.save(user);

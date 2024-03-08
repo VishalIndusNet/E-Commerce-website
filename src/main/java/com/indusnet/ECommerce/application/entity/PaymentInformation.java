@@ -7,7 +7,8 @@ import lombok.Data;
 
 import java.time.LocalDate;
 
-@Data public class PaymentInformation {
+@Data
+public class PaymentInformation {
 
     @Column(name = "cardholder_name")
     private String cardHolderName;

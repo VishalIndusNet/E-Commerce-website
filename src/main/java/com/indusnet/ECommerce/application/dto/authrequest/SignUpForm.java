@@ -1,4 +1,4 @@
-package com.indusnet.ECommerce.application.dto;
+package com.indusnet.ECommerce.application.dto.authrequest;
 
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.*;

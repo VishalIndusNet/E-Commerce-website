@@ -29,7 +29,7 @@ public class Product {
 
     private Integer quantity;
     private double price;
-    private double discountPersent;
+    private double discountPercent;
     private double discountPrice;
     private String brand;
     private String color;
