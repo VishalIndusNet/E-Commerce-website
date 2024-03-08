@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -45,7 +46,12 @@ public class Product {
     @OneToMany(mappedBy = "product",cascade = CascadeType.ALL,orphanRemoval = true)
     private List<Review> reviews= new ArrayList<>();
 
+    @Column(name = "num_ratings")
+    private int numRatings;
+
     @ManyToOne()
     @JoinColumn(name = "category_id")
     private Category category;
+
+    private LocalDateTime createdAt;
 }

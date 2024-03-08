@@ -1,4 +1,4 @@
-package com.indusnet.ECommerce.application.service;
+package com.indusnet.ECommerce.application.service.impl;
 
 import com.indusnet.ECommerce.application.dto.UserDTO;
 import com.indusnet.ECommerce.application.entity.User;
@@ -6,6 +6,7 @@ import com.indusnet.ECommerce.application.exception.UserException;
 import com.indusnet.ECommerce.application.repo.UserRepository;
 import com.indusnet.ECommerce.application.response.UserResponse;
 import com.indusnet.ECommerce.application.security.JwtProvider;
+import com.indusnet.ECommerce.application.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

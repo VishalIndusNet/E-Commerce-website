@@ -1,4 +1,4 @@
-package com.indusnet.ECommerce.application.service;
+package com.indusnet.ECommerce.application.service.impl;
 
 import com.indusnet.ECommerce.application.dto.authrequest.*;
 import com.indusnet.ECommerce.application.entity.RefreshToken;
@@ -7,6 +7,8 @@ import com.indusnet.ECommerce.application.repo.UserRepository;
 import com.indusnet.ECommerce.application.response.LoginResponse;
 import com.indusnet.ECommerce.application.response.RegisterResponse;
 import com.indusnet.ECommerce.application.security.JwtProvider;
+import com.indusnet.ECommerce.application.service.AuthService;
+import com.indusnet.ECommerce.application.service.OtpService;
 import com.indusnet.ECommerce.application.utils.EmailUtil;
 import com.indusnet.ECommerce.application.utils.OtpUtil;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +16,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +32,7 @@ public class AuthServiceImpl implements AuthService {
     private final RefreshTokenServiceImpl refreshTokenService;
     private final OtpUtil otpUtil;
     private final EmailUtil emailUtil;
-    private final  OtpService otpService;
+    private final OtpService otpService;
 
 
     @Override
@@ -94,6 +98,11 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public ResponseEntity<?> changePassword(ChangePasswordRequest changePasswordRequest) {
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if(auth == null){
+            throw new RuntimeException("First Login then You Change Password");
+        }
 
         User user = userRepository.findByEmail(changePasswordRequest.getEmail())
                 .orElseThrow(()-> new RuntimeException("User not exist with this email:"+changePasswordRequest.getEmail()));

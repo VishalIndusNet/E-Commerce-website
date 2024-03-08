@@ -29,6 +29,16 @@ public class JwtProvider {
         return extractClaim(token, Claims::getSubject);
     }
 
+    // Method to extract email from JWT
+//    public String getEmailFromToken(String token) {
+//        Claims claims = Jwts.parser()
+//                .setSigningKey(SECRET_KEY.getBytes())
+//                .parseClaimsJws(token)
+//                .getBody();
+//
+//        return claims.get("email", String.class); // Assuming "email" is the key used for the email claim
+//    }
+
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);

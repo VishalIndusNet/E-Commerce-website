@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,16 +19,28 @@ public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long orderId;
+    private Long Id;
 
+    @Column(name = "order_id")
+    private String orderId;
+
+    @ManyToOne
+    private User user;
 
     @OneToMany(mappedBy = "order", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     private List<OrderItem> orderItems = new ArrayList<>();
 
     private LocalDate orderDate;
+    private LocalDateTime deliveryDate;
+    @OneToOne
+    private Address shippingAddress;
 
-
-    private Double totalAmount;
+    private PaymentDetails paymentDetails = new PaymentDetails();
+    private double totalPrice;
+    private double totalDiscountedPrice;
+    private double discount;
     private String orderStatus;
+    private int totalItem;
+    private LocalDateTime createdAt;
 
 }

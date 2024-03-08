@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Data
 @Table(name = "order_items")
@@ -25,6 +27,10 @@ public class OrderItem {
     private Order order;
 
     private Integer quantity;
-    private double discount;
+    private double price;
+    private double discountPrice;
     private double orderedProductPrice;
+
+    private Long userId;
+    private LocalDateTime deliveryDate;
 }

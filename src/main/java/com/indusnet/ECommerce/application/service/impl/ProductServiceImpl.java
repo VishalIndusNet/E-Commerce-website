@@ -1,4 +1,4 @@
-package com.indusnet.ECommerce.application.service;
+package com.indusnet.ECommerce.application.service.impl;
 
 import com.indusnet.ECommerce.application.dto.CreateProductRequest;
 import com.indusnet.ECommerce.application.entity.Category;
@@ -6,6 +6,8 @@ import com.indusnet.ECommerce.application.entity.Product;
 import com.indusnet.ECommerce.application.exception.ProductException;
 import com.indusnet.ECommerce.application.repo.CategoryRepo;
 import com.indusnet.ECommerce.application.repo.ProductRepo;
+import com.indusnet.ECommerce.application.service.ProductService;
+import com.indusnet.ECommerce.application.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -18,7 +20,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class ProductServiceImpl implements ProductService{
+public class ProductServiceImpl implements ProductService {
 
     private final ProductRepo productRepo;
     private final CategoryRepo categoryRepo;
@@ -27,21 +29,21 @@ public class ProductServiceImpl implements ProductService{
     @Override
     public Product createProduct(CreateProductRequest request) {
 
-        Category topLevel= categoryRepo.findByName(request.getProductName());
+        Category topLevel= categoryRepo.findByName(request.getFirstLevelCategory());
 
         if(topLevel==null){
             Category topLevelCategory= new Category();
-            topLevelCategory.setName(request.getProductName());
+            topLevelCategory.setName(request.getFirstLevelCategory());
             topLevelCategory.setLevel(1);
 
             topLevel= categoryRepo.save(topLevelCategory);
         }
 
-        Category secondLevel= categoryRepo.findByNameAndParent(request.getProductName(), topLevel.getName());
+        Category secondLevel= categoryRepo.findByNameAndParent(request.getSecondLevelCategory(), topLevel.getName());
 
         if(secondLevel==null){
             Category secondLevelCategory= new Category();
-            secondLevelCategory.setName(request.getProductName());
+            secondLevelCategory.setName(request.getSecondLevelCategory());
             secondLevelCategory.setLevel(2);
             secondLevelCategory.setParentCategory(topLevel);
 
@@ -49,11 +51,11 @@ public class ProductServiceImpl implements ProductService{
         }
 
 
-        Category thirdLevel= categoryRepo.findByNameAndParent(request.getProductName(), secondLevel.getName());
+        Category thirdLevel= categoryRepo.findByNameAndParent(request.getThirdLevelCategory(), secondLevel.getName());
 
         if(thirdLevel==null){
             Category thirdLevelCategory= new Category();
-            thirdLevelCategory.setName(request.getProductName());
+            thirdLevelCategory.setName(request.getThirdLevelCategory());
             thirdLevelCategory.setLevel(3);
             thirdLevelCategory.setParentCategory(secondLevel);
 
@@ -139,7 +141,7 @@ public class ProductServiceImpl implements ProductService{
         }
 
         int startIndex= (int)pageable.getOffset();
-        int endIndex= Math.min(startIndex+ pageable.getPageSize(),products.size());
+        int endIndex= Math.min(startIndex + pageable.getPageSize(),products.size());
 
         List<Product> pageCount= products.subList(startIndex,endIndex);
 
