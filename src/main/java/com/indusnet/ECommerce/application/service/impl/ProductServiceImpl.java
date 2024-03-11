@@ -7,7 +7,6 @@ import com.indusnet.ECommerce.application.exception.ProductException;
 import com.indusnet.ECommerce.application.repo.CategoryRepo;
 import com.indusnet.ECommerce.application.repo.ProductRepo;
 import com.indusnet.ECommerce.application.service.ProductService;
-import com.indusnet.ECommerce.application.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -22,9 +21,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
 
+
     private final ProductRepo productRepo;
     private final CategoryRepo categoryRepo;
-    private final UserService userService;
 
     @Override
     public Product createProduct(CreateProductRequest request) {
@@ -83,11 +82,10 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public String deleteProduct(Long productId) throws ProductException {
+    public void deleteProduct(Long productId) throws ProductException {
         Product product= findProductById(productId);
         product.getSizes().clear(); //  if product is deleted then we also delete their size
         productRepo.delete(product);
-        return "product deleted successfully";
     }
 
     @Override
@@ -109,6 +107,12 @@ public class ProductServiceImpl implements ProductService {
     public List<Product> findProductByCategory(String category) {
 
         return null;
+    }
+
+    @Override
+    public List<Product> findAllProduct() {
+
+        return productRepo.findAll();
     }
 
     @Override

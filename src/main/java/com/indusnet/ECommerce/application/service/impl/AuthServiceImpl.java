@@ -8,7 +8,6 @@ import com.indusnet.ECommerce.application.response.LoginResponse;
 import com.indusnet.ECommerce.application.response.RegisterResponse;
 import com.indusnet.ECommerce.application.security.JwtProvider;
 import com.indusnet.ECommerce.application.service.AuthService;
-import com.indusnet.ECommerce.application.service.OtpService;
 import com.indusnet.ECommerce.application.utils.EmailUtil;
 import com.indusnet.ECommerce.application.utils.OtpUtil;
 import lombok.RequiredArgsConstructor;
@@ -100,12 +99,17 @@ public class AuthServiceImpl implements AuthService {
     public ResponseEntity<?> changePassword(ChangePasswordRequest changePasswordRequest) {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if(auth == null){
-            throw new RuntimeException("First Login then You Change Password");
-        }
+        String authenticatedUsername = auth.getName();
+
 
         User user = userRepository.findByEmail(changePasswordRequest.getEmail())
                 .orElseThrow(()-> new RuntimeException("User not exist with this email:"+changePasswordRequest.getEmail()));
+
+        if (!authenticatedUsername.equals(user.getEmail())) {
+//            throw new InvalidOperationException("You must be logged in as the correct user to change the password.");
+            throw new RuntimeException("First Login then You Change Password");
+        }
+
 
         if (!passwordEncoder.matches(changePasswordRequest.getOldPassword(), user.getPassword())) {
             // Handle the case where the old password is incorrect

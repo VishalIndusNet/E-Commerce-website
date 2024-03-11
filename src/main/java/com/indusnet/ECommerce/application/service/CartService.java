@@ -9,7 +9,7 @@ public interface CartService {
 
     Cart createCart(User user);
 
-    String addCartItem(Long userId, AddItemReq req) throws ProductException;
+    void addCartItem(Long userId, AddItemReq req) throws ProductException;
 
     Cart findUserCart(Long userId);
 

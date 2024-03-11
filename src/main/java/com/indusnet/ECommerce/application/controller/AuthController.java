@@ -7,7 +7,7 @@ import com.indusnet.ECommerce.application.repo.UserRepository;
 import com.indusnet.ECommerce.application.response.RefreshTokenResponse;
 import com.indusnet.ECommerce.application.security.JwtProvider;
 import com.indusnet.ECommerce.application.service.AuthService;
-import com.indusnet.ECommerce.application.service.OtpService;
+import com.indusnet.ECommerce.application.service.impl.OtpService;
 import com.indusnet.ECommerce.application.service.impl.RefreshTokenServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

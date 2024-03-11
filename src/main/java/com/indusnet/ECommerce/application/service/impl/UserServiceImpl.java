@@ -41,23 +41,23 @@ public class UserServiceImpl implements UserService {
         throw new UserException("user not found with email"+email);
     }
 
-    @Override
-    public UserResponse getAllUsers() {
-        return null;
-    }
-
-    @Override
-    public UserDTO getUserById(Long userId) {
-        return null;
-    }
-
-    @Override
-    public UserDTO updateUser(Long userId, UserDTO userDTO) {
-        return null;
-    }
-
-    @Override
-    public String deleteUser(Long userId) {
-        return null;
-    }
+//    @Override
+//    public UserResponse getAllUsers() {
+//        return null;
+//    }
+//
+//    @Override
+//    public UserDTO getUserById(Long userId) {
+//        return null;
+//    }
+//
+//    @Override
+//    public UserDTO updateUser(Long userId, UserDTO userDTO) {
+//        return null;
+//    }
+//
+//    @Override
+//    public String deleteUser(Long userId) {
+//        return null;
+//    }
 }

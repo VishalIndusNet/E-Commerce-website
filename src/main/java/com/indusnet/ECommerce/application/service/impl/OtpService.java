@@ -1,4 +1,4 @@
-package com.indusnet.ECommerce.application.service;
+package com.indusnet.ECommerce.application.service.impl;
 
 import com.indusnet.ECommerce.application.dto.authrequest.RegenerateOtp;
 import com.indusnet.ECommerce.application.entity.OtpEntity;

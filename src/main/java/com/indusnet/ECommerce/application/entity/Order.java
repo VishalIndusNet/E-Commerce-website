@@ -35,6 +35,7 @@ public class Order {
     @OneToOne
     private Address shippingAddress;
 
+    @Embedded
     private PaymentDetails paymentDetails = new PaymentDetails();
     private double totalPrice;
     private double totalDiscountedPrice;

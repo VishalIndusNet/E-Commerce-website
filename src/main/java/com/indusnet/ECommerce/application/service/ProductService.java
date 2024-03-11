@@ -10,15 +10,24 @@ import java.util.List;
 @Component
 public interface ProductService {
 
+    // admin
+
     Product createProduct(CreateProductRequest request);
 
-    String deleteProduct(Long productId) throws ProductException;
+    void deleteProduct(Long productId) throws ProductException;
 
     Product updateProduct(Long productId,Product req) throws ProductException;
 
-    Product findProductById(Long productId) throws ProductException;
+    List<Product> findAllProduct();
+
+    // user
 
     List<Product> findProductByCategory(String category);
+
+    Product findProductById(Long productId) throws ProductException;
+
     Page<Product> findAllProduct(String category,List<String> colors,List<String> size,Integer minPrice,Integer maxPrice,
     Integer minDiscount,String sort, String stock, Integer pageNumber, Integer pageSize);
+
+
 }

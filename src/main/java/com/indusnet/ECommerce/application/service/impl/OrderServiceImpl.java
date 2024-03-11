@@ -35,9 +35,10 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order confrimOrder(Long orderId) throws OrderException {
+    public Order confirmedOrder(Long orderId) throws OrderException {
         return null;
     }
+
 
     @Override
     public Order shippedOrder(Long orderId) throws OrderException {
@@ -60,7 +61,6 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order deleteOrder(Long orderId) throws OrderException {
-        return null;
+    public void deleteOrder(Long orderId) throws OrderException {
     }
 }

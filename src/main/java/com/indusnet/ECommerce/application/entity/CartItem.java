@@ -15,7 +15,7 @@ public class CartItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long cartItemId;
+    private Long Id;
 
     @ManyToOne
     @JoinColumn(name = "cart_id")
@@ -25,7 +25,10 @@ public class CartItem {
     @JoinColumn(name = "product_id")
     private Product product;
 
+    private String size;
     private Integer quantity;
     private double discountPrice;
     private double productPrice;
+
+    private Long userId;
 }
