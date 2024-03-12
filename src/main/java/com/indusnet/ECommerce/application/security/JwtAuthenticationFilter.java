@@ -32,15 +32,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private Logger logger = LoggerFactory.getLogger(OncePerRequestFilter.class);
 
     @Override
-    protected void doFilterInternal(@NotNull HttpServletRequest request,
-                                   @NotNull HttpServletResponse response,
-                                   @NotNull FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request,
+                                   HttpServletResponse response,
+                                    FilterChain filterChain) throws ServletException, IOException {
         //  Authorization = Bearer cvbnnnljuoisnenwf
         final String requestHeader = request.getHeader("Authorization");
 
         //Bearer 2352345235sdfrsfgsdfsdf
 
-        logger.info(" Header :  {}", requestHeader);
+//        logger.info(" Header :  {}", requestHeader);
 
         String username = null;
         String token = null;
@@ -48,7 +48,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (requestHeader != null && requestHeader.startsWith("Bearer ")) {
 
             token = requestHeader.substring(7);
+
             try {
+
 
                 username = this.jwtProvider.getUsernameFromToken(token);
 
@@ -68,7 +70,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         } else {
             logger.info("Invalid Header Value !! ");
-
         }
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
@@ -76,6 +77,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             //fetch user detail from username
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
+
             boolean validateToken = this.jwtProvider.isTokenValid(token, userDetails);
             if (validateToken) {
 

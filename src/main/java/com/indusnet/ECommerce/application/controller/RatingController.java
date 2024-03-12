@@ -39,5 +39,4 @@ public class RatingController {
 
         return new ResponseEntity<>(rating, HttpStatus.CREATED);
     }
-
 }

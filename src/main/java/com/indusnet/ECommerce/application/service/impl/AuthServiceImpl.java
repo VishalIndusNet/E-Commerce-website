@@ -1,6 +1,7 @@
 package com.indusnet.ECommerce.application.service.impl;
 
 import com.indusnet.ECommerce.application.dto.authrequest.*;
+import com.indusnet.ECommerce.application.entity.Cart;
 import com.indusnet.ECommerce.application.entity.RefreshToken;
 import com.indusnet.ECommerce.application.entity.User;
 import com.indusnet.ECommerce.application.repo.UserRepository;
@@ -8,6 +9,7 @@ import com.indusnet.ECommerce.application.response.LoginResponse;
 import com.indusnet.ECommerce.application.response.RegisterResponse;
 import com.indusnet.ECommerce.application.security.JwtProvider;
 import com.indusnet.ECommerce.application.service.AuthService;
+import com.indusnet.ECommerce.application.service.CartService;
 import com.indusnet.ECommerce.application.utils.EmailUtil;
 import com.indusnet.ECommerce.application.utils.OtpUtil;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +21,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -32,6 +36,7 @@ public class AuthServiceImpl implements AuthService {
     private final OtpUtil otpUtil;
     private final EmailUtil emailUtil;
     private final OtpService otpService;
+    private final CartService cartService;
 
 
     @Override
@@ -49,6 +54,8 @@ public class AuthServiceImpl implements AuthService {
         user.setEmail(signUpForm.getEmail());
         user.setAge(signUpForm.getAge());
         user.setGender(signUpForm.getGender());
+        user.setCreateAt(LocalDateTime.now());
+        user.setMobileNumber(signUpForm.getMobileNumber());
         user.setPassword(passwordEncoder.encode(signUpForm.getPassword()));
 
 
@@ -78,12 +85,15 @@ public class AuthServiceImpl implements AuthService {
                         loginForm.getPassword())
         );
 
+
         User user = userRepository.findByEmail(loginForm.getEmail())
                 .orElseThrow(() -> new RuntimeException("Fail! -> User not found."));
 
         if (!user.isVerified()) {
             return ResponseEntity.badRequest().body( "User is not verified. please verify then login");
         }
+
+        Cart cart= cartService.createCart(user);
 
         var jwtToken = jwtProvider.generateToken(user);
 

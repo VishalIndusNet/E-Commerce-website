@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.io.DecodingException;
 import io.jsonwebtoken.security.Keys;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
+import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,13 +23,21 @@ public class JwtProvider {
 
     private static final Logger logger = LoggerFactory.getLogger(JwtProvider.class);
 
-
-    private static final String SECRET_KEY = "GKGOFHOIEJFPEO5654FEW4F5EWF3DSDFWEFEFEW5F41";
+    private static final String SECRET_KEY = "sldfjoewkvmlkeijvmeiototoepqlcseoioadslerpoworialjewornvkewrui";
 
     // extract username from JWT
     public String getUsernameFromToken(String token) {
-        return extractClaim(token, Claims::getSubject);
+        try {
+            return extractClaim(token, Claims::getSubject);
+        } catch (DecodingException e) {
+            // Log the exception for debugging
+            logger.error("Error decoding JWT token: {}", e.getMessage(), e);
+            // Handle the exception or rethrow if needed
+            throw new RuntimeException("Error decoding JWT token", e);
+        }
     }
+
+
 
     // Method to extract email from JWT
 //    public String getEmailFromToken(String token) {
@@ -38,6 +48,7 @@ public class JwtProvider {
 //
 //        return claims.get("email", String.class); // Assuming "email" is the key used for the email claim
 //    }
+
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
@@ -57,7 +68,7 @@ public class JwtProvider {
     // decode and get the key
     private Key getSignInKey() {
         // decode SECRET_KEY
-        byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
+        byte[] keyBytes = Base64.getDecoder().decode(SECRET_KEY);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
@@ -66,7 +77,6 @@ public class JwtProvider {
         return doGenerateToken(new HashMap<>(), userDetails);
     }
 
-    // generate token using Jwt utility class and return token as String
     public String doGenerateToken(
             Map<String, Object> extraClaims,
             UserDetails userDetails
@@ -74,7 +84,6 @@ public class JwtProvider {
         return Jwts
                 .builder()
                 .setClaims(extraClaims)
-             //   .claim("email",auth.getName())
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 60 *60 * 1000))

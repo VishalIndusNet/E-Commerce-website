@@ -13,5 +13,6 @@ public class UserDTO {
     private String lastName;
     private String mobileNumber;
     private String email;
-    private String password;
+    private String age;
+    private String gender;
 }

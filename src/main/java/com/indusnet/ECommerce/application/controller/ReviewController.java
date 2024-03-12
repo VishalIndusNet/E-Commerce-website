@@ -41,7 +41,7 @@ public class ReviewController {
 
         List<Review> review=reviewService.getAllReview(productId);
 
-        return new ResponseEntity<>(review, HttpStatus.CREATED);
+        return new ResponseEntity<>(review, HttpStatus.ACCEPTED);
     }
 
 }
